@@ -1,6 +1,6 @@
 import os
 from langchain_community.document_loaders import TextLoader,DirectoryLoader
-from langchain_text_splitters import CharacterTextSplitter
+from langchain_text_splitters import CharacterTextSplitter,RecursiveCharacterTextSplitter
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_chroma import Chroma
 from dotenv import load_dotenv
@@ -33,6 +33,16 @@ def split_documents(documents,chunk_size=800,chunk_overlap=0):
     print(type(chunks))
     return chunks
 
+# def slipt_documents_RecursiveCharacterTextSplitter(documents,chunk_size=800,chunk_overlap=0):
+#     text_splitter = RecursiveCharacterTextSplitter(
+#         chunk_size = chunk_size,
+#         chunk_overlap = chunk_overlap
+#     )
+#     chunks = text_splitter.split_documents(documents)
+#     print(len(chunks))
+#     for i in range(5):
+#         print(len(chunks[i].page_content))
+#     return chunks
 
 def vectorize_and_store(chunks,persist_directory="db/chroma/db"):
     embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
@@ -58,6 +68,8 @@ def main():
     #Chunk the documents
 
     splitted_docs = split_documents(documents)
+
+    # splitted_docs_RCTS = slipt_documents_RecursiveCharacterTextSplitter(documents)
 
     #Embbed the data and store in vectorDB(Chroma)
 
